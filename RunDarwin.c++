@@ -30,7 +30,7 @@ To document the program:
 #include <cstdlib>   // rand, srand
 #include <iostream>  // cout, endl
 #include <stdexcept> // invalid_argument, out_of_range
-
+#include "Darwin.h"
 // ----
 // main
 // ----
@@ -41,25 +41,27 @@ int main () {
     // ----
     // food
     // ----
-
+	Species food("food");
     /*
      0: left
      1: go 0
     */
-
+	food.add_instruction(LEFT);
+	food.add_instruction(GO,0);
     // ------
     // hopper
     // ------
-
+	Species hopper("hopper");
     /*
      0: hop
      1: go 0
     */
-
+	hopper.add_instruction(HOP);
+	hopper.add_instruction(GO,0);
     // -----
     // rover
     // -----
-
+	Species rover("rover");
     /*
      0: if_enemy 9
      1: if_empty 7
@@ -73,11 +75,21 @@ int main () {
      9: infect
     10: go 0
     */
-
+	rover.add_instruction(IF_ENEMY,9);
+	rover.add_instruction(IF_EMPTY,7);
+	rover.add_instruction(IF_RANDOM,5);
+	rover.add_instruction(LEFT);
+	rover.add_instruction(GO,0);
+	rover.add_instruction(RIGHT);
+	rover.add_instruction(GO,0);
+	rover.add_instruction(HOP);
+	rover.add_instruction(GO,0);
+	rover.add_instruction(INFECT);
+	rover.add_instruction(GO,0);
     // ----
     // trap
     // ----
-
+	Species trap("trap");
     /*
      0: if_enemy 3
      1: left
@@ -85,13 +97,56 @@ int main () {
      3: infect
      4: go 0
     */
+	trap.add_instruction(IF_ENEMY,3);
+	trap.add_instruction(LEFT);
+	trap.add_instruction(GO,0);
+	trap.add_instruction(INFECT);
+	trap.add_instruction(GO,0);
 
+    // ----
+    // best
+    // ----
+	Species best("best");
+    /*
+	 0: if_enemy 6
+	 1: if_empty 4
+	 2: left
+	 3: go 0
+	 4: hop
+	 5: go 0
+	 6: infect
+	 7: go 0
+    */
+	best.add_instruction(IF_ENEMY,6);
+	best.add_instruction(IF_EMPTY,4);
+	best.add_instruction(LEFT);
+	best.add_instruction(GO,0);
+	best.add_instruction(HOP);
+	best.add_instruction(GO,0);
+	best.add_instruction(INFECT);
+	best.add_instruction(GO,0);
     // ----------
     // darwin 8x8
     // ----------
 
     try {
         cout << "*** Darwin 8x8 ***" << endl;
+
+		Darwin d(8,8);
+		
+		d.add_creature(food,EAST,0,0);
+		d.add_creature(hopper,NORTH,3,3);
+		d.add_creature(hopper,EAST,3,4);
+		d.add_creature(hopper,SOUTH,4,4);
+		d.add_creature(hopper,WEST,4,3);
+		d.add_creature(food,NORTH,7,7);
+
+		for(int i=0; i<=5; i++)
+		{
+			cout<< "Turn = " << i << "."<<endl;
+			d.display();
+			d.simulate();
+		}
         /*
         8x8 Darwin
         Food,   facing east,  at (0, 0)
@@ -116,6 +171,19 @@ int main () {
     try {
         cout << "*** Darwin 7x9 ***" << endl;
         srand(0);
+		
+		Darwin d(7,9);
+
+		d.add_creature(trap,SOUTH,0,0);
+		d.add_creature(hopper,EAST,3,2);
+		d.add_creature(rover,NORTH,5,4);
+		d.add_creature(trap,WEST,6,8);
+		for(int i=0; i<=5; i++)
+		{
+			cout<< "Turn = " << i << "."<<endl;
+			d.display();
+			d.simulate();
+		}
         /*
         7x9 Darwin
         Trap,   facing south, at (0, 0)
@@ -139,6 +207,60 @@ int main () {
     try {
         cout << "*** Darwin 72x72 without Best ***" << endl;
         srand(0);
+
+		Darwin d(72,72);
+
+		for(int i=0; i<10; i++)
+		{
+			int pos =rand() % 5184;
+			int x = pos%72;
+			int y = pos/72;
+			int dir =rand()%4;
+			d.add_creature(food,dir,x,y);
+		}
+
+		for(int i=0; i<10; i++)
+		{
+			int pos =rand() % 5184;
+			int x = pos%72;
+			int y = pos/72;
+			int dir =rand()%4;
+			d.add_creature(hopper,dir,x,y);
+		}
+
+		for(int i=0; i<10; i++)
+		{
+			int pos =rand() % 5184;
+			int x = pos%72;
+			int y = pos/72;
+			int dir =rand()%4;
+			d.add_creature(rover,dir,x,y);
+		}
+
+		for(int i=0; i<10; i++)
+		{
+			int pos =rand() % 5184;
+			int x = pos%72;
+			int y = pos/72;
+			int dir =rand()%4;
+			d.add_creature(trap,dir,x,y);
+		}
+
+		for(int i=0; i<=1000; i++)
+		{
+			if(i<=10)
+			{
+			cout<< "Turn = " << i << "."<<endl;
+				d.display();
+			}
+			else if(i%100 == 0)
+			{
+			cout<< "Turn = " << i << "."<<endl;
+				d.display();
+			}
+			d.simulate();
+			
+		}
         /*
         Randomly place the following creatures facing randomly.
         Call rand(), mod it with 5184 (72x72), and use that for the position
@@ -168,6 +290,67 @@ int main () {
     try {
         cout << "*** Darwin 72x72 with Best ***" << endl;
         srand(0);
+
+		Darwin d(72,72);
+
+		for(int i=0; i<10; i++)
+		{
+			int pos =rand() % 5184;
+			int x = pos%72;
+			int y = pos/72;
+			int dir =rand()%4;
+			d.add_creature(food,dir,x,y);
+		}
+
+		for(int i=0; i<10; i++)
+		{
+			int pos =rand() % 5184;
+			int x = pos%72;
+			int y = pos/72;
+			int dir =rand()%4;
+			d.add_creature(hopper,dir,x,y);
+		}
+
+		for(int i=0; i<10; i++)
+		{
+			int pos =rand() % 5184;
+			int x = pos%72;
+			int y = pos/72;
+			int dir =rand()%4;
+			d.add_creature(rover,dir,x,y);
+		}
+
+		for(int i=0; i<10; i++)
+		{
+			int pos =rand() % 5184;
+			int x = pos%72;
+			int y = pos/72;
+			int dir =rand()%4;
+			d.add_creature(trap,dir,x,y);
+		}
+		for(int i=0; i<10; i++)
+		{
+			int pos =rand() % 5184;
+			int x = pos%72;
+			int y = pos/72;
+			int dir =rand()%4;
+			d.add_creature(best,dir,x,y);
+		}
+		for(int i=0; i<=1000; i++)
+		{
+			if(i<=10)
+			{
+			cout<< "Turn = " << i << "."<<endl;
+				d.display();
+			}
+			else if(i%100 == 0)
+			{
+			cout<< "Turn = " << i << "."<<endl;
+				d.display();
+			}
+			d.simulate();
+			
+		}
         /*
         Randomly place the following creatures facing randomly.
         Call rand(), mod it with 5184 (72x72), and use that for the position
