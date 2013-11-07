@@ -85,6 +85,15 @@ class Darwin
 	static bool is_random_exec(int& x,int& y,int dir);
 	static bool is_empty_exec(int& x,int& y,int dir);
 	static bool go_exec(int& x,int& y,int dir);
+	
+	//Test getters
+	static int get_x(){return xlen;}
+	static int get_y(){return ylen;}
+	static int get_grid_x(){return grid.size();}
+	static int get_grid_y(){return grid[0].size();}
+	static int get_creatures_size(){return creatures.size();}
+	static Creature& get_creature(int i){return creatures[i];}
+	
 };
 
 
