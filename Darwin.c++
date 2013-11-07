@@ -94,8 +94,10 @@ bool Darwin::is_enemy_exec(int& x,int& y,int dir)
 	int new_x=x;
 	int new_y=y;
 	if(is_wall_exec(x,y,dir)) return false;
+
 	if(!is_empty_exec(x,y,dir))
 	{
+		
 		if(grid[x][y]!=-1)
 		{
 			switch(dir)
@@ -287,9 +289,10 @@ bool Darwin::go_exec(int& x,int& y,int dir){return true;}
 			else
 			{
 				//instr.display_name();
+				//printf("x,y: %d,%d \n",x,y);
 				if(instr.exec_instr(x,y, dir))
 				{
-					pc=instr.go_to;
+					pc=instr.go_to;		
 				}
 				else
 				{

@@ -374,5 +374,201 @@ int main () {
     catch (const out_of_range&) {
         assert(false);}
 
+    // ----------------
+    // Additional tests
+    // ----------------
+
+    try {
+        cout << "*** Darwin 30x50 without Best ***" << endl;
+        srand(0);
+        Darwin d(30, 50);
+		for(int i=0; i<100; i++)
+		{
+			int pos =rand() % 1500;
+			int x = pos%30;
+			int y = pos/50;
+			int dir =rand()%4;
+			d.add_creature(food,dir,x,y);
+		}
+
+		for(int i=0; i<10; i++)
+		{
+			int pos =rand() % 1500;
+			int x = pos%30;
+			int y = pos/50;
+			int dir =rand()%4;
+			d.add_creature(hopper,dir,x,y);
+		}
+
+		for(int i=0; i<10; i++)
+		{
+			int pos =rand() % 1500;
+			int x = pos%30;
+			int y = pos/50;
+			int dir =rand()%4;
+			d.add_creature(rover,dir,x,y);
+		}
+
+		for(int i=0; i<10; i++)
+		{
+			int pos =rand() % 1500;
+			int x = pos%30;
+			int y = pos/50;
+			int dir =rand()%4;
+			d.add_creature(trap,dir,x,y);
+		}
+
+        int s = 0;
+        for (; s <= 20; s++){
+            d.display();
+            d.simulate();
+        }
+        for (; s <= 2000; s++){
+            d.simulate();
+        }
+        d.display();
+
+    } catch (const invalid_argument&) {
+        assert(false);
+    } catch (const out_of_range&) {
+        assert(false);
+    }
+
+
+    try {
+        cout << "*** Darwin 2x2 without Best ***" << endl;
+        srand(0);
+       	Darwin d(2, 2);
+
+			{
+			int pos =rand() % 4;
+			int x = pos%2;
+			int y = pos/2;
+			int dir =rand()%4;
+			d.add_creature(hopper,dir,x,y);
+			}
+			int pos =rand() % 4;
+			int x = pos%2;
+			int y = pos/2;
+			int dir =rand()%4;
+			d.add_creature(rover,dir,x,y);
+
+        int s = 0;
+        for (; s <= 7; s++){
+            d.display();
+            d.simulate();
+        }
+    } catch (const invalid_argument&) {
+        assert(false);
+    } catch (const out_of_range&) {
+        assert(false);
+    }
+
+    try {
+        cout << "*** Fod Walk Meet In Middle 4x4 ***" << endl;
+        Darwin d(4, 6);
+        d.add_creature(hopper, EAST, 0, 0);
+        d.add_creature(hopper, EAST, 1, 0);
+        d.add_creature(hopper, EAST, 2, 0);
+        d.add_creature(hopper, EAST, 3, 0);
+        d.add_creature(hopper, WEST, 0, 5);
+        d.add_creature(hopper, WEST, 1, 5);
+        d.add_creature(hopper, WEST, 2, 5);
+        d.add_creature(hopper, WEST, 3, 5);
+        const int NUM_MOVES = 4;
+        d.display();
+        std::cout << std::endl;
+        for (int i = 0; i < NUM_MOVES; ++i) {
+            d.simulate();
+            d.display();
+            std::cout << endl;
+        }
+    }
+    catch (const invalid_argument&) {
+        assert(false);}
+    catch (const out_of_range&) {
+        assert(false);} 
+
+
+    try{
+        cout << "*** Darwin 50x50 with hoppers ***" << endl;
+        srand(0);
+        
+        Darwin map(50, 50);
+
+        for(int i = 0; i<50; i++){
+            int randPos = rand() % 2500;
+            map.add_creature(hopper,rand()%4, randPos%50, randPos/50);
+        }
+        map.display();
+
+        for(int i = 1; i<=100; i++){
+            map.simulate();
+            if(i < 10)
+                map.display();
+            else{
+                if(i % 100 == 0)
+                    map.display();
+            }
+        }
+    }
+    catch (const invalid_argument&) {
+        assert(false);}
+    catch (const out_of_range&) {
+        assert(false);}
+
+
+    try {
+        cout << "*** Darwin 4x4 Trap ***" << endl;
+        /*
+        8x8 Darwin
+        Simulate 10 moves.
+        Print the final grid. Every hopper should of been trapped. 
+        */
+        srand(0);
+        Darwin game(4, 4);
+        game.add_creature(trap, NORTH, 3,0);
+        game.add_creature(trap, NORTH, 3,1);
+        game.add_creature(trap, NORTH, 3,2);
+        game.add_creature(trap, NORTH, 3,3);
+
+        game.add_creature(hopper, SOUTH, 0,0);
+        game.add_creature(hopper, SOUTH, 0,1);
+        game.add_creature(hopper, SOUTH, 0,2);
+        game.add_creature(hopper, SOUTH, 0,3);
+        
+        game.display();
+        for(uint32_t i = 0; i < 10; ++i){
+            game.simulate();
+        }
+        game.display(); 
+    }
+    catch (const invalid_argument&) {
+        assert(false);}
+    catch (const out_of_range&) {
+        assert(false);}
+
+
+    try {
+        cout << "*** Darwin 5x5 ***" << endl;
+        srand(0);
+
+        Darwin grid(5,5);
+        grid.add_creature(trap, WEST, 0, 0);
+        grid.add_creature(hopper, NORTH, 0, 1);
+        grid.add_creature(hopper, EAST, 0, 2);
+        grid.add_creature(hopper, SOUTH, 0, 3);
+        grid.display();
+        for (int i = 0; i < 5; i++){
+            grid.simulate();
+            grid.display();
+        }
+        
+    }
+    catch (const invalid_argument&) {
+        assert(false);}
+    catch (const out_of_range&) {
+        assert(false);}
+
     return 0;}
 
