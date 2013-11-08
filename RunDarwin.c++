@@ -377,6 +377,11 @@ int main () {
     // ----------------
     // Additional tests
     // ----------------
+	//1. osaprych
+	//2. davismc
+	//3. bsy6766
+	//4. ss48333
+	//5. nlaz
 
     try {
         cout << "*** Darwin 30x50 without Best ***" << endl;
